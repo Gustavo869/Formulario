@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Banner */
+.banner {
+    background-color: #004a99;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-bottom: 4px solid #003366;
+}
+
+.banner h1 {
+    margin-bottom: 5px;
+}
+
+.banner p {
+    font-size: 14px;
+}
+
+/* Container do formulário */
+main {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
