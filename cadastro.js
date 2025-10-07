@@ -7,6 +7,25 @@ formCliente.addEventListener("submit", async (event) => {
         console.log(dados)
 })
 
+try {
+        const resposta = await fetch("http://127.0.0.1:3000/cadastrar" , {
+            method: "POST",
+            headers: {"Content-Type": "application/json"}, 
+            body: JSON.stringify(dados)
+        })
+
+        if(!resposta.ok) {
+            throw new Error("Erro na API!")
+        }
+
+        alert("Cadastro realizado com sucesso!")
+        formCliente.reset()
+
+    } catch (error) {
+        alert("Erro ao cadastrar cliente: "+ error)
+    }
+
+
 function pegarDadosCliente(){
     let cliente = new Object();
     cliente.nome = document.getElementById("nome")
@@ -21,4 +40,5 @@ function pegarDadosCliente(){
     cliente.cep = document.getElementById("cep")
     cliente.senha = document.getElementById("nome")
     return cliente
+
 }
