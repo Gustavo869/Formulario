@@ -1068,6 +1068,112 @@
             </div>
         </div>
         
+    <!-- Scripts JavaScript -->
+    <script>
+        // Função para buscar CEP
+        async function buscarCEP(cep) {
+            try {
+                // Remove caracteres não numéricos
+                cep = cep.replace(/\D/g, '');
+                
+                // Verifica se CEP tem 8 dígitos
+                if (cep.length !== 8) {
+                    throw new Error('CEP deve conter 8 dígitos');
+                }
+                
+                const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                
+                if (!resposta.ok) {
+                    throw new Error('Erro ao buscar CEP');
+                }
+                
+                const dados = await resposta.json();
+                
+                if (dados.erro) {
+                    throw new Error('CEP não encontrado');
+                }
+                
+                // Preenche os campos com os dados retornados
+                document.getElementById('logradouro').value = dados.logradouro || '';
+                document.getElementById('bairro').value = dados.bairro || '';
+                document.getElementById('cidade').value = dados.localidade || '';
+                document.getElementById('estado').value = dados.uf || '';
+                document.getElementById('complemento').focus(); // Foca no complemento para facilitar
+                
+            } catch (error) {
+                alert('Erro ao buscar CEP: ' + error.message);
+            }
+        }
+
+        // Função para formatar CEP (XXXXX-XXX)
+        function formatarCEP(cep) {
+            cep = cep.replace(/\D/g, '');
+            cep = cep.replace(/^(\d{5})(\d)/, '$1-$2');
+            return cep;
+        }
+
+        // Inicialização quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnCep = document.getElementById('btnCep');
+            const cepInput = document.getElementById('cep');
+            
+            // Adiciona evento ao botão de buscar CEP
+            if (btnCep) {
+                btnCep.addEventListener('click', function() {
+                    const cep = cepInput.value;
+                    if (cep) {
+                        buscarCEP(cep);
+                    } else {
+                        alert('Por favor, digite um CEP');
+                    }
+                });
+            }
+            
+            // Busca automática ao digitar 8 caracteres
+            if (cepInput) {
+                cepInput.addEventListener('input', function() {
+                    // Formata o CEP enquanto digita
+                    this.value = formatarCEP(this.value);
+                    
+                    // Busca automática quando tiver 9 caracteres (8 números + traço)
+                    const cepNumerico = this.value.replace(/\D/g, '');
+                    if (cepNumerico.length === 8) {
+                        buscarCEP(this.value);
+                    }
+                });
+                
+                // Permite buscar com Enter
+                cepInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const cep = this.value;
+                        if (cep) {
+                            buscarCEP(cep);
+                        }
+                    }
+                });
+            }
+        });
+
+        // Funções existentes do seu site (mantidas para referência)
+        function showPage(pageId) {
+            // Esconde todas as páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostra a página solicitada
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function filterProducts(category) {
+            // Função para filtrar produtos (implementação existente)
+            console.log('Filtrando produtos por:', category);
+        }
+    </script>
+</body>
+</html>
+
         <!-- Página Sobre -->
         <div id="about" class="page">
             <div class="container">
@@ -1095,10 +1201,3 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Página Contato -->
-        <div id="contact" class="page">
-            <div class="container">
-                <div class="banner" style="margin-bottom: 40px;">
-                    <div class="banner-content">
-                        <h1
