@@ -26,16 +26,16 @@ formCliente.addEventListener("submit", async (event) => {
 
 function pegarDadosCliente(){
     let cliente = new Object();
-    cliente.nome = document.getElementById("nome")
-    cliente.cpf = document.getElementById("cpf")
-    cliente.email = document.getElementById("email")
-    cliente.telefone = document.getElementById("telefone")
-    cliente.rua = document.getElementById("logradouro")
-    cliente.n_casa = document.getElementById("numero")
-    cliente.bairro = document.getElementById("bairro")
-    cliente.cidade = document.getElementById("cidade")
-    cliente.uf = document.getElementById("estado")
-    cliente.cep = document.getElementById("cep")
-    cliente.senha = document.getElementById("nome")
+    cliente.nome = document.getElementById("nome").value
+    cliente.cpf = document.getElementById("cpf").value
+    cliente.email = document.getElementById("email").value
+    cliente.telefone = document.getElementById("telefone").value
+    cliente.rua = document.getElementById("logradouro").value
+    cliente.n_casa = document.getElementById("numero").value
+    cliente.bairro = document.getElementById("bairro").value
+    cliente.cidade = document.getElementById("cidade").value
+    cliente.uf = document.getElementById("estado").value
+    cliente.cep = document.getElementById("cep").value.replace(/\D/g, '')
+    cliente.senha = document.getElementById("nome").value
     return cliente
 }
