@@ -34,6 +34,29 @@ app.post("/cadastrar", async (req, res)=>{
     }
 })
 
+app.post("/login", async(req, res)=>{
+/* 20/10/2025 */ 
+const login = req.body;
+if(login.email == null) {
+    return res.status(400).json({erro: "Informe o email"})
+}
+if (login.senha == null ) {
+    return res.status(400).json({erro: "Informe o email"})
+}
+return res.status(200).json({res: "Loguin recebido"})
+/* ########## */
+/* Próximas etapas:
+        -checar se email existe no banco de dados
+        -Validar se a senha está correta
+        -Criar um Token JWT e enviar como resposta
+            * Informações importantes de adicionar no token:
+              -email
+              -nome
+              -id
+
+     */
+})
+
 
 
 app.get("/clientes", async (req,res) => {
