@@ -13,6 +13,7 @@ const cors = require("cors")
 app.use(cors())
 
 // npm i jsonwebtoken
+const jwt = require("Jsonwebtoken")
 
 
 app.post("/cadastrar", async (req, res)=>{
@@ -76,7 +77,8 @@ if (dados.senha != loguin.senha){
     return res.status(401).json({erro: "Credenciais inválidas"}) 
 }
 // criar um token para o usuario 
-return res.status(200).json({token: "token aqui"})
+const token = jwt.sign(dados, "senha_muito_forte", {expiresIn: '1m'})
+return res.status(200).json({token: token})
 } catch (error) {
     return res.status(500).json({erro: "Erro interno na API" + error})
 }
