@@ -12,6 +12,8 @@ const db = require("./db")
 const cors = require("cors")
 app.use(cors())
 
+// npm i jsonwebtoken
+
 
 app.post("/cadastrar", async (req, res)=>{
     const cliente = req.body
@@ -65,8 +67,6 @@ try {
         "SELECT id_cliente, nome, email, senha, FROM cliente WHERE email = ?",
         [loguin.email]
 )
-
-
 /* 28/10/25 */
 const dados = resultado[0][0]
 if(!dados){
