@@ -37,13 +37,15 @@ app.post("/cadastrar", async (req, res)=>{
 app.post("/login", async(req, res)=>{
 /* 20/10/2025 */ 
 const login = req.body;
-if(login.email == null) {
+if(login.email == null){
     return res.status(400).json({erro: "Informe o email"})
 }
 if (login.senha == null ) {
     return res.status(400).json({erro: "Informe o email"})
 }
 return res.status(200).json({res: "Loguin recebido"})
+
+
 /* ########## */
 /* Próximas etapas:
         -checar se email existe no banco de dados
@@ -56,6 +58,28 @@ return res.status(200).json({res: "Loguin recebido"})
 
      */
 })
+
+/* 27/10/2025 */
+try {
+    const resultado = await db.pool.query(
+        "SELECT id_cliente, nome, email, senha, FROM cliente WHERE email = ?",
+        [loguin.email]
+)
+
+
+/* 28/10/25 */
+const dados = resultado[0][0]
+if(!dados){
+    return res.status(401).json({erro: "Credenciais inválidas"})
+}
+if (dados.senha != loguin.senha){
+    return res.status(401).json({erro: "Credenciais inválidas"}) 
+}
+// criar um token para o usuario 
+return res.status(200).json({token: "token aqui"})
+} catch (error) {
+    return res.status(500).json({erro: "Erro interno na API" + error})
+}
 
 
 
