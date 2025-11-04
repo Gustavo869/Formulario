@@ -13,7 +13,7 @@ const cors = require("cors")
 app.use(cors())
 
 // npm i jsonwebtoken
-const jwt = require("Jsonwebtoken")
+const jwt = require("jsonwebtoken")
 
 
 app.post("/cadastrar", async (req, res)=>{
@@ -37,7 +37,7 @@ app.post("/cadastrar", async (req, res)=>{
     }
 })
 
-app.post("/login", async(req, res)=>{
+app.post("/login", async (req, res)=>{
 /* 20/10/2025 */ 
 const login = req.body;
 if(login.email == null){
@@ -46,22 +46,6 @@ if(login.email == null){
 if (login.senha == null ) {
     return res.status(400).json({erro: "Informe o email"})
 }
-return res.status(200).json({res: "Loguin recebido"})
-
-
-/* ########## */
-/* Próximas etapas:
-        -checar se email existe no banco de dados
-        -Validar se a senha está correta
-        -Criar um Token JWT e enviar como resposta
-            * Informações importantes de adicionar no token:
-              -email
-              -nome
-              -id
-
-     */
-})
-
 /* 27/10/2025 */
 try {
     const resultado = await db.pool.query(
@@ -82,6 +66,11 @@ return res.status(200).json({token: token})
 } catch (error) {
     return res.status(500).json({erro: "Erro interno na API" + error})
 }
+
+
+})
+
+
 
 
 
