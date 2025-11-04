@@ -70,7 +70,18 @@ return res.status(200).json({token: token})
 
 })
 
-
+app.get("perfil"), async (res,req) => {
+    const email = token.email //corrigir na prox aula
+    try {
+        const resultado = await db.pool.query(
+            "SELECT * FROM cliente WHERE email = ?",
+            [email]
+        )
+        res.status(200).json(resultado[0])
+    } catch (erro){
+        console.log(erro)
+    }
+}
 
 
 
