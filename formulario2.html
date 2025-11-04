@@ -674,6 +674,26 @@
             color: #e74c3c;
         }
         
+        /* Mensagens de feedback */
+        .message {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
         /* Responsividade */
         @media (max-width: 768px) {
             .header-content {
@@ -796,6 +816,7 @@
             <div class="container">
                 <div class="form-container">
                     <h2>Cadastro de Cliente</h2>
+                    <div id="cadastroMessage"></div>
                     <form id="clientForm">
                         <div class="row">
                             <div class="col">
@@ -966,6 +987,7 @@
             <div class="container">
                 <div class="login-container">
                     <h2>Login</h2>
+                    <div id="loginMessage"></div>
                     
                     <div class="social-login">
                         <button class="btn-social btn-facebook">
@@ -1068,113 +1090,6 @@
             </div>
         </div>
         
-    <!-- Scripts JavaScript -->
-    <script>
-        // Função para buscar CEP
-        async function buscarCEP(cep) {
-            try {
-                // Remove caracteres não numéricos
-                cep = cep.replace(/\D/g, '');
-                
-                // Verifica se CEP tem 8 dígitos
-                if (cep.length !== 8) {
-                    throw new Error('CEP deve conter 8 dígitos');
-                }
-                
-                const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                
-                if (!resposta.ok) {
-                    throw new Error('Erro ao buscar CEP');
-                }
-                
-                const dados = await resposta.json();
-                
-                if (dados.erro) {
-                    throw new Error('CEP não encontrado');
-                }
-                
-                // Preenche os campos com os dados retornados
-                document.getElementById('logradouro').value = dados.logradouro || '';
-                document.getElementById('bairro').value = dados.bairro || '';
-                document.getElementById('cidade').value = dados.localidade || '';
-                document.getElementById('estado').value = dados.uf || '';
-                document.getElementById('complemento').focus(); // Foca no complemento para facilitar
-                
-            } catch (error) {
-                alert('Erro ao buscar CEP: ' + error.message);
-            }
-        }
-
-        // Função para formatar CEP (XXXXX-XXX)
-        function formatarCEP(cep) {
-            cep = cep.replace(/\D/g, '');
-            cep = cep.replace(/^(\d{5})(\d)/, '$1-$2');
-            return cep;
-        }
-
-        // Inicialização quando o DOM estiver carregado
-        document.addEventListener('DOMContentLoaded', function() {
-            const btnCep = document.getElementById('btnCep');
-            const cepInput = document.getElementById('cep');
-            
-            // Adiciona evento ao botão de buscar CEP
-            if (btnCep) {
-                btnCep.addEventListener('click', function() {
-                    const cep = cepInput.value;
-                    if (cep) {
-                        buscarCEP(cep);
-                    } else {
-                        alert('Por favor, digite um CEP');
-                    }
-                });
-            }
-            
-            // Busca automática ao digitar 8 caracteres
-            if (cepInput) {
-                cepInput.addEventListener('input', function() {
-                    // Formata o CEP enquanto digita
-                    this.value = formatarCEP(this.value);
-                    
-                    // Busca automática quando tiver 9 caracteres (8 números + traço)
-                    const cepNumerico = this.value.replace(/\D/g, '');
-                    if (cepNumerico.length === 8) {
-                        buscarCEP(this.value);
-                    }
-                });
-                
-                // Permite buscar com Enter
-                cepInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        const cep = this.value;
-                        if (cep) {
-                            buscarCEP(cep);
-                        }
-                    }
-                });
-            }
-        });
-
-        // Funções existentes do seu site (mantidas para referência)
-        function showPage(pageId) {
-            // Esconde todas as páginas
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Mostra a página solicitada
-            document.getElementById(pageId).classList.add('active');
-        }
-
-        function filterProducts(category) {
-            // Função para filtrar produtos (implementação existente)
-            console.log('Filtrando produtos por:', category);
-        }
-    </script>
-    <script src="cadastro.js"></script>
-</body>
-</html>
-
         <!-- Página Sobre -->
         <div id="about" class="page">
             <div class="container">
@@ -1189,7 +1104,7 @@
                     <h2>Nossa História</h2>
                     <p style="margin-bottom: 20px;">A GlobalTech Solutions foi fundada em 2010 com a missão de oferecer as melhores soluções em tecnologia para empresas de todos os tamanhos. Ao longo dos anos, nos tornamos referência no mercado, sempre priorizando a qualidade e a inovação.</p>
                     
-                    <p style="margin-bottom: 20px;">Nossa equipe é composta por profissionais altamente qualificados и apaixonados por tecnologia, prontos para oferecer o melhor suporte e as melhores soluções para nossos clientes.</p>
+                    <p style="margin-bottom: 20px;">Nossa equipe é composta por profissionais altamente qualificados e apaixonados por tecnologia, prontos para oferecer o melhor suporte e as melhores soluções para nossos clientes.</p>
                     
                     <h2 style="margin-top: 30px;">Nossos Valores</h2>
                     <ul style="margin-left: 20px; margin-bottom: 20px;">
@@ -1202,3 +1117,714 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Página de Contato -->
+        <div id="contact" class="page">
+            <div class="container">
+                <div class="banner" style="margin-bottom: 40px;">
+                    <div class="banner-content">
+                        <h1>Contato</h1>
+                        <p>Entre em contato conosco</p>
+                    </div>
+                </div>
+                
+                <div class="form-container">
+                    <h2>Fale Conosco</h2>
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="contactName">Nome</label>
+                                    <input type="text" id="contactName" name="name" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="contactEmail">E-mail</label>
+                                    <input type="email" id="contactEmail" name="email" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactSubject">Assunto</label>
+                            <input type="text" id="contactSubject" name="subject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactMessage">Mensagem</label>
+                            <textarea id="contactMessage" name="message" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit">Enviar Mensagem</button>
+                    </form>
+                </div>
+                
+                <div class="row" style="margin-top: 40px;">
+                    <div class="col">
+                        <div class="form-container">
+                            <h2>Informações de Contato</h2>
+                            <p><i class="fas fa-map-marker-alt" style="margin-right: 10px; color: #4ecdc4;"></i> Av. Paulista, 1000 - São Paulo, SP</p>
+                            <p><i class="fas fa-phone" style="margin-right: 10px; color: #4ecdc4;"></i> (11) 1234-5678</p>
+                            <p><i class="fas fa-envelope" style="margin-right: 10px; color: #4ecdc4;"></i> contato@globaltech.com.br</p>
+                            <p><i class="fas fa-clock" style="margin-right: 10px; color: #4ecdc4;"></i> Segunda a Sexta: 9h às 18h</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-container">
+                            <h2>Nosso Endereço</h2>
+                            <div style="height: 200px; background: #f8f9fa; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                                <p style="color: #7f8c8d;"><i class="fas fa-map" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i> Mapa do local</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GlobalTech Solutions</h3>
+                    <p>Oferecendo as melhores soluções em tecnologia desde 2010.</p>
+                    <div style="margin-top: 15px;">
+                        <a href="#"><i class="fab fa-facebook-f" style="margin-right: 10px;"></i></a>
+                        <a href="#"><i class="fab fa-twitter" style="margin-right: 10px;"></i></a>
+                        <a href="#"><i class="fab fa-instagram" style="margin-right: 10px;"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in" style="margin-right: 10px;"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Links Rápidos</h3>
+                    <a href="#" onclick="showPage('home')">Home</a>
+                    <a href="#" onclick="showPage('products')">Produtos</a>
+                    <a href="#" onclick="showPage('about')">Sobre Nós</a>
+                    <a href="#" onclick="showPage('contact')">Contato</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Produtos</h3>
+                    <a href="#" onclick="filterProducts('notebooks')">Notebooks</a>
+                    <a href="#" onclick="filterProducts('desktops')">Desktops</a>
+                    <a href="#" onclick="filterProducts('acessorios')">Acessórios</a>
+                    <a href="#" onclick="filterProducts('perifericos')">Periféricos</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Suporte</h3>
+                    <a href="#">FAQ</a>
+                    <a href="#">Política de Privacidade</a>
+                    <a href="#">Termos de Uso</a>
+                    <a href="#">Trocas e Devoluções</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 GlobalTech Solutions. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sistema de navegação entre páginas
+        function showPage(pageId) {
+            // Esconde todas as páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostra a página selecionada
+            document.getElementById(pageId).classList.add('active');
+            
+            // Se for a página de produtos, carrega os produtos
+            if (pageId === 'products') {
+                loadProducts();
+            }
+            
+            // Se for a página do carrinho, atualiza o carrinho
+            if (pageId === 'cart') {
+                updateCart();
+            }
+        }
+        
+        // Função para carregar produtos
+        function loadProducts(category = 'all') {
+            const productsGrid = document.getElementById('productsGrid');
+            
+            // Produtos de exemplo
+            const products = [
+                {
+                    id: 1,
+                    name: 'Notebook Gamer Elite',
+                    price: 4599.99,
+                    category: 'notebooks',
+                    image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 2,
+                    name: 'Desktop Workstation Pro',
+                    price: 3299.99,
+                    category: 'desktops',
+                    image: 'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 3,
+                    name: 'Mouse Gamer RGB',
+                    price: 199.99,
+                    category: 'perifericos',
+                    image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 4,
+                    name: 'Teclado Mecânico Pro',
+                    price: 349.99,
+                    category: 'perifericos',
+                    image: 'https://images.unsplash.com/photo-1541140532154-b024d705b90a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 5,
+                    name: 'Monitor 27" 4K',
+                    price: 1899.99,
+                    category: 'perifericos',
+                    image: 'https://images.unsplash.com/photo-1586210579191-33b45e38fa2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 6,
+                    name: 'Headset Gamer 7.1',
+                    price: 299.99,
+                    category: 'perifericos',
+                    image: 'https://images.unsplash.com/photo-1599669454699-248893623440?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 7,
+                    name: 'Notebook Ultrafino',
+                    price: 3199.99,
+                    category: 'notebooks',
+                    image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 8,
+                    name: 'Software Antivírus Plus',
+                    price: 149.99,
+                    category: 'software',
+                    image: 'https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                }
+            ];
+            
+            // Filtra produtos por categoria se necessário
+            const filteredProducts = category === 'all' ? products : products.filter(product => product.category === category);
+            
+            // Limpa o grid
+            productsGrid.innerHTML = '';
+            
+            // Adiciona produtos ao grid
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                        <div class="product-actions">
+                            <button class="btn-add-cart" onclick="addToCart(${product.id})">
+                                <i class="fas fa-cart-plus"></i> Adicionar
+                            </button>
+                            <button class="btn-details">Detalhes</button>
+                        </div>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+        }
+        
+        // Função para filtrar produtos
+        function filterProducts(category) {
+            loadProducts(category);
+            showPage('products');
+        }
+        
+        // Sistema de carrinho
+        let cart = [];
+        
+        // Adiciona produto ao carrinho
+        function addToCart(productId) {
+            // Produtos de exemplo
+            const products = [
+                {
+                    id: 1,
+                    name: 'Notebook Gamer Elite',
+                    price: 4599.99,
+                    image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 2,
+                    name: 'Desktop Workstation Pro',
+                    price: 3299.99,
+                    image: 'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 3,
+                    name: 'Mouse Gamer RGB',
+                    price: 199.99,
+                    image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 4,
+                    name: 'Teclado Mecânico Pro',
+                    price: 349.99,
+                    image: 'https://images.unsplash.com/photo-1541140532154-b024d705b90a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 5,
+                    name: 'Monitor 27" 4K',
+                    price: 1899.99,
+                    image: 'https://images.unsplash.com/photo-1586210579191-33b45e38fa2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 6,
+                    name: 'Headset Gamer 7.1',
+                    price: 299.99,
+                    image: 'https://images.unsplash.com/photo-1599669454699-248893623440?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 7,
+                    name: 'Notebook Ultrafino',
+                    price: 3199.99,
+                    image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                },
+                {
+                    id: 8,
+                    name: 'Software Antivírus Plus',
+                    price: 149.99,
+                    image: 'https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+                }
+            ];
+            
+            const product = products.find(p => p.id === productId);
+            
+            // Verifica se o produto já está no carrinho
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+            
+            // Atualiza o contador do carrinho
+            updateCartCount();
+            
+            // Mostra mensagem de sucesso
+            alert(`${product.name} adicionado ao carrinho!`);
+        }
+        
+        // Atualiza o contador do carrinho
+        function updateCartCount() {
+            const cartCount = document.getElementById('cartCount');
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+        
+        // Atualiza a exibição do carrinho
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const subtotalElement = document.getElementById('subtotal');
+            const shippingElement = document.getElementById('shipping');
+            const discountElement = document.getElementById('discount');
+            const totalElement = document.getElementById('total');
+            
+            // Se o carrinho estiver vazio
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart-message" style="text-align: center; padding: 40px; color: #7f8c8d;">
+                        <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                        <h3>Seu carrinho está vazio</h3>
+                        <p>Adicione produtos para continuar</p>
+                        <button class="btn-checkout" style="max-width: 250px; margin: 20px auto 0;" onclick="showPage('products')">Ver Produtos</button>
+                    </div>
+                `;
+                
+                subtotalElement.textContent = 'R$ 0,00';
+                shippingElement.textContent = 'R$ 0,00';
+                discountElement.textContent = '- R$ 0,00';
+                totalElement.textContent = 'R$ 0,00';
+                
+                return;
+            }
+            
+            // Calcula os totais
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shipping = subtotal > 500 ? 0 : 29.99;
+            const discount = subtotal > 1000 ? subtotal * 0.1 : 0;
+            const total = subtotal + shipping - discount;
+            
+            // Atualiza os totais
+            subtotalElement.textContent = `R$ ${subtotal.toFixed(2)}`;
+            shippingElement.textContent = `R$ ${shipping.toFixed(2)}`;
+            discountElement.textContent = `- R$ ${discount.toFixed(2)}`;
+            totalElement.textContent = `R$ ${total.toFixed(2)}`;
+            
+            // Limpa o carrinho
+            cartItems.innerHTML = '';
+            
+            // Adiciona os itens ao carrinho
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div class="cart-item-image">
+                        <img src="${item.image}" alt="${item.name}" style="max-width: 80px; max-height: 80px;">
+                    </div>
+                    <div class="cart-item-info">
+                        <h3 class="cart-item-title">${item.name}</h3>
+                        <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+                    </div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                            <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                        </div>
+                        <button class="btn-remove" onclick="removeFromCart(${item.id})">
+                            <i class="fas fa-trash"></i> Remover
+                        </button>
+                    </div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+        }
+        
+        // Aumenta a quantidade de um item no carrinho
+        function increaseQuantity(productId) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += 1;
+                updateCart();
+                updateCartCount();
+            }
+        }
+        
+        // Diminui a quantidade de um item no carrinho
+        function decreaseQuantity(productId) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                if (item.quantity > 1) {
+                    item.quantity -= 1;
+                } else {
+                    removeFromCart(productId);
+                    return;
+                }
+                updateCart();
+                updateCartCount();
+            }
+        }
+        
+        // Remove um item do carrinho
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+            updateCartCount();
+        }
+        
+        // Sistema de usuários
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        
+        // Função para validar força da senha
+        function validatePassword(password) {
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+            };
+            
+            // Atualiza a interface com o status dos requisitos
+            document.getElementById('reqLength').className = requirements.length ? 'requirement valid' : 'requirement invalid';
+            document.getElementById('reqUppercase').className = requirements.uppercase ? 'requirement valid' : 'requirement invalid';
+            document.getElementById('reqLowercase').className = requirements.lowercase ? 'requirement valid' : 'requirement invalid';
+            document.getElementById('reqNumber').className = requirements.number ? 'requirement valid' : 'requirement invalid';
+            document.getElementById('reqSpecial').className = requirements.special ? 'requirement valid' : 'requirement invalid';
+            
+            // Calcula a força da senha (0-100)
+            const strength = Object.values(requirements).filter(Boolean).length * 20;
+            
+            // Atualiza a barra de força
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            strengthBar.style.width = `${strength}%`;
+            
+            if (strength <= 40) {
+                strengthBar.style.background = '#e74c3c';
+            } else if (strength <= 80) {
+                strengthBar.style.background = '#f39c12';
+            } else {
+                strengthBar.style.background = '#27ae60';
+            }
+            
+            return requirements.length && requirements.uppercase && requirements.lowercase && requirements.number && requirements.special;
+        }
+        
+        // Função para verificar se as senhas coincidem
+        function checkPasswordMatch() {
+            const password = document.getElementById('senha').value;
+            const confirmPassword = document.getElementById('confirmar_senha').value;
+            const messageElement = document.getElementById('passwordMatchMessage');
+            
+            if (confirmPassword === '') {
+                messageElement.textContent = '';
+                messageElement.style.color = '';
+            } else if (password === confirmPassword) {
+                messageElement.textContent = 'As senhas coincidem';
+                messageElement.style.color = '#27ae60';
+            } else {
+                messageElement.textContent = 'As senhas não coincidem';
+                messageElement.style.color = '#e74c3c';
+            }
+        }
+        
+        // Função para alternar visibilidade da senha
+        function togglePasswordVisibility(inputId, toggleId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = document.getElementById(toggleId);
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'fas fa-eye-slash password-toggle';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'fas fa-eye password-toggle';
+            }
+        }
+        
+        // Event Listeners para os toggles de senha
+        document.getElementById('toggleSenha').addEventListener('click', function() {
+            togglePasswordVisibility('senha', 'toggleSenha');
+        });
+        
+        document.getElementById('toggleConfirmarSenha').addEventListener('click', function() {
+            togglePasswordVisibility('confirmar_senha', 'toggleConfirmarSenha');
+        });
+        
+        document.getElementById('toggleLoginPassword').addEventListener('click', function() {
+            togglePasswordVisibility('loginPassword', 'toggleLoginPassword');
+        });
+        
+        // Event Listeners para validação de senha
+        document.getElementById('senha').addEventListener('input', function() {
+            validatePassword(this.value);
+            checkPasswordMatch();
+        });
+        
+        document.getElementById('confirmar_senha').addEventListener('input', checkPasswordMatch);
+        
+        // Formulário de cadastro
+        document.getElementById('clientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Valida a senha
+            const password = document.getElementById('senha').value;
+            const confirmPassword = document.getElementById('confirmar_senha').value;
+            
+            if (!validatePassword(password)) {
+                showMessage('cadastroMessage', 'A senha não atende aos requisitos mínimos de segurança.', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('cadastroMessage', 'As senhas não coincidem.', 'error');
+                return;
+            }
+            
+            // Verifica se o usuário já existe
+            const email = document.getElementById('email').value;
+            if (users.find(user => user.email === email)) {
+                showMessage('cadastroMessage', 'Este e-mail já está cadastrado.', 'error');
+                return;
+            }
+            
+            // Cria o novo usuário
+            const newUser = {
+                nome: document.getElementById('nome').value,
+                email: email,
+                telefone: document.getElementById('telefone').value,
+                cpf: document.getElementById('cpf').value,
+                senha: password, // Em um sistema real, isso seria criptografado
+                endereco: {
+                    cep: document.getElementById('cep').value,
+                    logradouro: document.getElementById('logradouro').value,
+                    numero: document.getElementById('numero').value,
+                    complemento: document.getElementById('complemento').value,
+                    bairro: document.getElementById('bairro').value,
+                    cidade: document.getElementById('cidade').value,
+                    estado: document.getElementById('estado').value
+                }
+            };
+            
+            // Adiciona o usuário à lista
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Mostra mensagem de sucesso
+            showMessage('cadastroMessage', 'Cadastro realizado com sucesso!', 'success');
+            
+            // Limpa o formulário
+            document.getElementById('clientForm').reset();
+            
+            // Redireciona para a página de login após 2 segundos
+            setTimeout(() => {
+                showPage('login');
+            }, 2000);
+        });
+        
+        // Formulário de login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Verifica as credenciais
+            const user = users.find(user => user.email === email && user.senha === password);
+            
+            if (user) {
+                showMessage('loginMessage', `Login realizado com sucesso! Bem-vindo, ${user.nome}.`, 'success');
+                
+                // Em um sistema real, você armazenaria o token de autenticação aqui
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                // Redireciona para a página inicial após 2 segundos
+                setTimeout(() => {
+                    showPage('home');
+                }, 2000);
+            } else {
+                showMessage('loginMessage', 'E-mail ou senha incorretos.', 'error');
+            }
+        });
+        
+        // Função para exibir mensagens
+        function showMessage(elementId, message, type) {
+            const messageElement = document.getElementById(elementId);
+            messageElement.textContent = message;
+            messageElement.className = `message ${type}-message`;
+        }
+        
+        // Busca CEP
+        document.getElementById('btnCep').addEventListener('click', function() {
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            
+            if (cep.length !== 8) {
+                alert('CEP inválido. Digite um CEP com 8 dígitos.');
+                return;
+            }
+            
+            // Simulação de busca de CEP
+            const cepData = {
+                '01001000': {
+                    logradouro: 'Praça da Sé',
+                    bairro: 'Sé',
+                    cidade: 'São Paulo',
+                    estado: 'SP'
+                },
+                '20040002': {
+                    logradouro: 'Rua Primeiro de Março',
+                    bairro: 'Centro',
+                    cidade: 'Rio de Janeiro',
+                    estado: 'RJ'
+                },
+                '30140007': {
+                    logradouro: 'Avenida Amazonas',
+                    bairro: 'Centro',
+                    cidade: 'Belo Horizonte',
+                    estado: 'MG'
+                }
+            };
+            
+            if (cepData[cep]) {
+                document.getElementById('logradouro').value = cepData[cep].logradouro;
+                document.getElementById('bairro').value = cepData[cep].bairro;
+                document.getElementById('cidade').value = cepData[cep].cidade;
+                document.getElementById('estado').value = cepData[cep].estado;
+            } else {
+                alert('CEP não encontrado. Preencha os campos manualmente.');
+            }
+        });
+        
+        // Formatação de CPF
+        document.getElementById('cpf').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
+            if (value.length > 9) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            } else if (value.length > 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+            } else if (value.length > 3) {
+                value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Formatação de CEP
+        document.getElementById('cep').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 8) {
+                value = value.substring(0, 8);
+            }
+            
+            if (value.length > 5) {
+                value = value.replace(/(\d{5})(\d{1,3})/, '$1-$2');
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Formatação de telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
+            if (value.length > 10) {
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else if (value.length > 6) {
+                value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+            } else if (value.length > 0) {
+                value = value.replace(/(\d{0,2})/, '($1');
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verifica se há um usuário logado
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.querySelector('.btn-login').innerHTML = `<i class="fas fa-user"></i>${currentUser.nome.split(' ')[0]}`;
+            }
+            
+            // Atualiza o contador do carrinho
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>
